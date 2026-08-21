@@ -3,6 +3,19 @@ import crypto from 'crypto';
 class Blockchain {
   constructor() {
     this.difficulty = process.env.NODE_ENV === 'test' ? 1 : 2;
+    this.chain = [this.createGenesisBlock()];
+    this.pendingTransactions = [];
+  }
+
+  createGenesisBlock() {
+    return {
+      index: 0,
+      timestamp: Date.now(),
+      transactions: [],
+      previousHash: '0',
+      nonce: 0,
+      hash: '0',
+    };
   }
 
   calculateHash(index, previousHash, transactions, nonce) {
@@ -13,6 +26,7 @@ class Blockchain {
 
   mineBlock(index, previousHash, transactions) {
     let nonce = 0;
+
     let hash = this.calculateHash(index, previousHash, transactions, nonce);
 
     const target = '0'.repeat(this.difficulty);
