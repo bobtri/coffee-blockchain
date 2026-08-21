@@ -29,3 +29,14 @@ describe('Blockchain mining', () => {
     expect(result.nonce).toBeGreaterThanOrEqual(0);
   });
 });
+
+describe('Blockchain structure', () => {
+  it('should start with a genesis block and an empty pending transaction list', () => {
+    const blockchain = new Blockchain();
+
+    expect(blockchain.chain).toHaveLength(1);
+    expect(blockchain.chain[0].index).toBe(0);
+    expect(blockchain.chain[0].previousHash).toBe('0');
+    expect(blockchain.pendingTransactions).toEqual([]);
+  });
+});
