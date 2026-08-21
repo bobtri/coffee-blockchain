@@ -43,3 +43,30 @@ describe('POST /transactions', () => {
     expect(response.body.error).toBeDefined();
   });
 });
+
+describe('POST /mine', () => {
+  it('should mine pending transactions into a new block', async () => {
+    const transaction = {
+      sender: 'Coffee Farm',
+      recipient: 'Roastery',
+      batchId: 'BATCH-002',
+      weightKg: 150,
+    };
+
+    await request(app).post('/transactions').send(transaction);
+
+    const response = await request(app).post('/mine');
+
+    expect(response.status).toBe(201);
+    expect(response.body.block).toBeDefined();
+    expect(response.body.block.transactions).toContainEqual(transaction);
+    expect(response.body.block.hash.startsWith('0')).toBe(true);
+  });
+
+  it('should reject mining when there are no pending transactions', async () => {
+    const response = await request(app).post('/mine');
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBeDefined();
+  });
+});
