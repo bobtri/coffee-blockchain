@@ -16,3 +16,16 @@ describe('Blockchain hash function', () => {
     expect(hash).toMatch(/^[a-f0-9]{64}$/);
   });
 });
+
+describe('Blockchain mining', () => {
+  it('should find a hash that matches the difficulty', () => {
+    const blockchain = new Blockchain();
+
+    const result = blockchain.mineBlock(1, 'previousHash', [
+      { sender: 'Farm', recipient: 'Roastery', batchId: 'A1', weightKg: 100 },
+    ]);
+
+    expect(result.hash.startsWith('0')).toBe(true);
+    expect(result.nonce).toBeGreaterThanOrEqual(0);
+  });
+});
