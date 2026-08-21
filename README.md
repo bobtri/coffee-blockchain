@@ -226,7 +226,7 @@ The project exceeds the VG requirement of 80% code coverage.
 
 ```
 Statements: 100%
-Branches: 91.66%
+Branches: 95.23%
 Functions: 100%
 Lines: 100%
 ```
