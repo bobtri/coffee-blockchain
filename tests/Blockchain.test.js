@@ -40,3 +40,21 @@ describe('Blockchain structure', () => {
     expect(blockchain.pendingTransactions).toEqual([]);
   });
 });
+
+describe('Blockchain transactions', () => {
+  it('should add a transaction to pendingTransactions', () => {
+    const blockchain = new Blockchain();
+
+    const transaction = {
+      sender: 'Coffee Farm',
+      recipient: 'Roastery',
+      batchId: 'BATCH-001',
+      weightKg: 250,
+    };
+
+    blockchain.addTransaction(transaction);
+
+    expect(blockchain.pendingTransactions).toHaveLength(1);
+    expect(blockchain.pendingTransactions[0]).toEqual(transaction);
+  });
+});
