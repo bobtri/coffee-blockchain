@@ -93,3 +93,14 @@ describe('Mining pending transactions', () => {
     expect(blockchain.pendingTransactions).toEqual([]);
   });
 });
+
+describe('Mining without pending transactions', () => {
+  it('should not create a new block when there are no pending transactions', () => {
+    const blockchain = new Blockchain();
+
+    const result = blockchain.minePendingTransactions();
+
+    expect(result).toBeNull();
+    expect(blockchain.chain).toHaveLength(1);
+  });
+});
