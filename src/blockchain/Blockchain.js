@@ -26,6 +26,32 @@ class Blockchain {
     this.pendingTransactions.push(transaction);
   }
 
+  minePendingTransactions() {
+    const latestBlock = this.getLatestBlock();
+    const index = latestBlock.index + 1;
+    const previousHash = latestBlock.hash;
+
+    const miningResult = this.mineBlock(
+      index,
+      previousHash,
+      this.pendingTransactions,
+    );
+
+    const newBlock = {
+      index,
+      timestamp: Date.now(),
+      transactions: [...this.pendingTransactions],
+      previousHash,
+      nonce: miningResult.nonce,
+      hash: miningResult.hash,
+    };
+
+    this.chain.push(newBlock);
+    this.pendingTransactions = [];
+
+    return newBlock;
+  }
+
   calculateHash(index, previousHash, transactions, nonce) {
     const data = index + previousHash + JSON.stringify(transactions) + nonce;
 
