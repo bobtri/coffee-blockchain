@@ -99,7 +99,7 @@ Current coverage
 | Metric     | Result |
 | ---------- | ------ |
 | Statements | 100%   |
-| Branches   | 91.66% |
+| Branches   | 95.23% |
 | Functions  | 100%   |
 | Lines      | 100%   |
 
