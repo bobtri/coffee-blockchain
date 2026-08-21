@@ -27,3 +27,18 @@ app.post('/transactions', validateTransaction, (req, res) => {
 });
 
 export default app;
+
+app.post('/mine', (req, res) => {
+  const block = blockchain.minePendingTransactions();
+
+  if (!block) {
+    return res.status(400).json({
+      error: 'No pending transactions to mine',
+    });
+  }
+
+  res.status(201).json({
+    message: 'Block mined successfully',
+    block,
+  });
+});
