@@ -18,6 +18,10 @@ class Blockchain {
     };
   }
 
+  getLatestBlock() {
+    return this.chain[this.chain.length - 1];
+  }
+
   addTransaction(transaction) {
     this.pendingTransactions.push(transaction);
   }
