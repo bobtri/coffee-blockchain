@@ -18,6 +18,10 @@ class Blockchain {
     };
   }
 
+  addTransaction(transaction) {
+    this.pendingTransactions.push(transaction);
+  }
+
   calculateHash(index, previousHash, transactions, nonce) {
     const data = index + previousHash + JSON.stringify(transactions) + nonce;
 

@@ -58,3 +58,14 @@ describe('Blockchain transactions', () => {
     expect(blockchain.pendingTransactions[0]).toEqual(transaction);
   });
 });
+
+describe('Latest block', () => {
+  it('should return the genesis block', () => {
+    const blockchain = new Blockchain();
+
+    const latestBlock = blockchain.getLatestBlock();
+
+    expect(latestBlock.index).toBe(0);
+    expect(latestBlock.previousHash).toBe('0');
+  });
+});
