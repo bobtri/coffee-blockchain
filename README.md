@@ -1,256 +1,256 @@
-Coffee Blockchain API
+# ☕ Coffee Blockchain API
 
-A Node.js backend API for tracking Fair Trade coffee shipments using a blockchain-based logistics ledger protected by Proof of Work.
+A Node.js REST API that simulates a blockchain-based logistics ledger for tracking Fair Trade coffee shipments.
 
-The application allows coffee farms, roasteries and cafés to register coffee movements as transactions. Pending transactions can then be mined into blocks and added to the blockchain.
+This project was developed as part of the Backend Node.js course using **Express**, **Vitest**, **Supertest**, **Proof of Work**, **SHA-256 hashing**, and **Test-Driven Development (TDD)**.
 
-Technologies
+---
+
+# 📋 Table of Contents
+
+- [Features](#-features)
+- [Technologies](#-technologies)
+- [Installation](#-installation)
+- [Running the application](#-running-the-application)
+- [Running the tests](#-running-the-tests)
+- [API Endpoints](#-api-endpoints)
+- [Proof of Work](#-proof-of-work)
+- [Environment Variables](#-environment-variables)
+- [TDD Workflow](#-tdd-workflow)
+- [Code Coverage](#-code-coverage)
+- [Project Structure](#-project-structure)
+
+---
+
+# 🚀 Features
+
+- Blockchain implementation
+- Genesis block
+- SHA-256 hashing
+- Proof-of-Work mining
+- Pending transactions
+- REST API with Express
+- Request validation middleware
+- Unit tests
+- Integration tests
+- Test Driven Development
+
+---
+
+# 🛠 Technologies
 
 - Node.js
 - Express
 - Vitest
 - Supertest
-- Node.js crypto
+- Node.js Crypto
 - SHA-256
-- Proof of Work
+- REST API
 
-Installation
+---
 
-Clone the repository and install the dependencies:
+# 📦 Installation
 
+Clone the repository
+
+```bash
 git clone https://github.com/bobtri/coffee-blockchain.git
 cd coffee-blockchain
+```
+
+Install dependencies
+
+```bash
 npm install
+```
 
-Start the server
+---
 
-Run:
+# ▶ Running the application
 
+```bash
 npm start
+```
 
-The server starts on:
+The server starts on
 
+```
 http://localhost:3000
+```
 
-If a PORT environment variable is provided, that port will be used instead.
+---
 
-Run tests
+# 🧪 Running the tests
 
-Run the test suite with:
+Run all tests
 
+```bash
 npm test
+```
 
-To run all tests once:
+Run coverage
 
-npm run test:run
-
-Code coverage
-
-Run:
-
+```bash
 npm run coverage
+```
 
-The project has more than 80% code coverage, which satisfies the coverage requirement for VG.
+Current coverage
 
-Blockchain
+| Metric     | Result |
+| ---------- | ------ |
+| Statements | 100%   |
+| Branches   | 91.66% |
+| Functions  | 100%   |
+| Lines      | 100%   |
 
-The blockchain consists of:
+---
 
-- chain – an array containing completed blocks.
-- pendingTransactions – transactions waiting to be mined.
-- difficulty – determines how many zeroes a valid Proof-of-Work hash must begin with.
+# 📡 API Endpoints
 
-Each block contains:
+## GET /blockchain
 
+Returns the current blockchain.
+
+### Response
+
+```json
 {
-"index": 1,
-"timestamp": 123456789,
-"transactions": [],
-"previousHash": "0",
-"nonce": 25,
-"hash": "00abc..."
+  "chain": [],
+  "pendingTransactions": []
 }
+```
 
-Transactions
+---
 
-A transaction represents a coffee shipment.
+## POST /transactions
 
-Example:
+Adds a new pending transaction.
 
+### Request
+
+```json
 {
-"sender": "Coffee Farm",
-"recipient": "Roastery",
-"batchId": "BATCH-001",
-"weightKg": 250
+  "sender": "Coffee Farm",
+  "recipient": "Roastery",
+  "batchId": "BATCH-001",
+  "weightKg": 250
 }
+```
 
-All four fields are required.
+---
 
-sender, recipient and batchId must be strings.
+## POST /mine
 
-weightKg must be a positive number.
+Mines all pending transactions into a new block.
 
-Proof of Work
+---
 
-The application uses Node.js’ built-in crypto module and SHA-256 hashing.
+# ⛏ Proof of Work
 
-The hash is generated from:
+The blockchain uses SHA-256 hashing together with a nonce.
 
+The hash is generated from
+
+```
 index + previousHash + transactions + nonce
+```
 
-During mining, the nonce is increased until the generated hash begins with the required number of zeroes.
+The nonce increases until the generated hash starts with the required number of leading zeroes.
 
-For example, with difficulty 2, a valid hash must begin with:
+Example
 
-00
+```
+0004af83...
+```
 
-Mining difficulty
+---
 
-The mining difficulty changes depending on the environment.
+# ⚙ Environment Variables
 
-During tests:
+Mining difficulty automatically changes depending on the environment.
 
-NODE_ENV=test
-difficulty = 1
+| Environment | Difficulty |
+| ----------- | ---------- |
+| test        | 1          |
+| production  | 2          |
 
-Outside the test environment:
+This prevents slow tests while keeping the production version computationally harder.
 
-difficulty = 2
+---
 
-This allows the Proof-of-Work algorithm to be tested quickly without causing test timeouts.
+# 🔴🟢 TDD Workflow
 
-API
+The project was developed using Test Driven Development.
 
-GET /blockchain
+Three examples from the Git history:
 
-Returns the current blockchain and all pending transactions.
+### SHA-256 Hash
 
-Example response:
-
-{
-"chain": [],
-"pendingTransactions": []
-}
-
-POST /transactions
-
-Adds a new coffee shipment to pendingTransactions.
-
-Example request:
-
-{
-"sender": "Coffee Farm",
-"recipient": "Roastery",
-"batchId": "BATCH-001",
-"weightKg": 250
-}
-
-Successful response:
-
-{
-"message": "Transaction added",
-"transaction": {
-"sender": "Coffee Farm",
-"recipient": "Roastery",
-"batchId": "BATCH-001",
-"weightKg": 250
-}
-}
-
-Invalid transactions return HTTP status 400.
-
-POST /mine
-
-Mines all pending transactions into a new block using Proof of Work.
-
-Successful mining returns HTTP status 201 together with the newly created block.
-
-If there are no pending transactions, the endpoint returns HTTP status 400.
-
-Test-Driven Development
-
-The application was developed using Test-Driven Development.
-
-Tests were written before the corresponding production code. The Git history therefore shows a RED → GREEN progression.
-
-Example 1 – SHA-256 hashing
-
-RED – failing test:
-
-619ab4f test: add failing test for SHA-256 hash
-
-GREEN – implementation:
-
-b2310d6 feat: implement SHA-256 hash function
-
-Links:
+RED
 
 https://github.com/bobtri/coffee-blockchain/commit/619ab4f
+
+GREEN
+
 https://github.com/bobtri/coffee-blockchain/commit/b2310d6
 
-Example 2 – Proof-of-Work mining
+---
 
-RED – failing test:
+### Proof of Work
 
-a567e4c test: add failing test for proof-of-work mining
-
-GREEN – implementation:
-
-769c8fa feat: implement proof-of-work mining
-
-Links:
+RED
 
 https://github.com/bobtri/coffee-blockchain/commit/a567e4c
+
+GREEN
+
 https://github.com/bobtri/coffee-blockchain/commit/769c8fa
 
-Example 3 – Mining pending transactions
+---
 
-RED – failing test:
+### Mining Pending Transactions
 
-6ce6ccd test: add failing test for mining pending transactions
-
-GREEN – implementation:
-
-53de6c8 feat: mine pending transactions into new block
-
-Links:
+RED
 
 https://github.com/bobtri/coffee-blockchain/commit/6ce6ccd
+
+GREEN
+
 https://github.com/bobtri/coffee-blockchain/commit/53de6c8
 
-Testing
+---
 
-The project contains both unit tests and integration tests.
+# 📈 Code Coverage
 
-Unit tests cover functionality such as:
+The project exceeds the VG requirement of 80% code coverage.
 
-- SHA-256 hashing
-- Proof-of-Work
-- blockchain structure
-- pending transactions
-- mining
+```
+Statements: 100%
+Branches: 91.66%
+Functions: 100%
+Lines: 100%
+```
 
-Integration tests use Supertest to verify:
+---
 
-- GET /blockchain
-- POST /transactions
-- transaction validation
-- POST /mine
+# 📁 Project Structure
 
-Project structure
-
-coffee-blockchain/
-├── src/
-│ ├── blockchain/
-│ │ └── Blockchain.js
-│ ├── middleware/
-│ │ └── validateTransaction.js
-│ ├── app.js
-│ └── server.js
-├── tests/
-│ ├── Blockchain.test.js
-│ └── api.test.js
-├── .gitignore
+```
+coffee-blockchain
+│
+├── src
+│   ├── blockchain
+│   │   └── Blockchain.js
+│   ├── middleware
+│   │   └── validateTransaction.js
+│   ├── app.js
+│   └── server.js
+│
+├── tests
+│   ├── Blockchain.test.js
+│   └── api.test.js
+│
 ├── package.json
-├── package-lock.json
-└── README.md
+├── README.md
+└── .gitignore
+```
