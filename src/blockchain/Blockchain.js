@@ -27,6 +27,10 @@ class Blockchain {
   }
 
   minePendingTransactions() {
+    if (this.pendingTransactions.length === 0) {
+      return null;
+    }
+
     const latestBlock = this.getLatestBlock();
     const index = latestBlock.index + 1;
     const previousHash = latestBlock.hash;
