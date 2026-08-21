@@ -4,7 +4,6 @@ import Blockchain from '../src/blockchain/Blockchain.js';
 describe('Blockchain hash function', () => {
   it('should generate a SHA-256 hash', () => {
     const blockchain = new Blockchain();
-
     const hash = blockchain.calculateHash(
       1,
       'previousHash',
@@ -20,7 +19,6 @@ describe('Blockchain hash function', () => {
 describe('Blockchain mining', () => {
   it('should find a hash that matches the difficulty', () => {
     const blockchain = new Blockchain();
-
     const result = blockchain.mineBlock(1, 'previousHash', [
       { sender: 'Farm', recipient: 'Roastery', batchId: 'A1', weightKg: 100 },
     ]);
@@ -44,7 +42,6 @@ describe('Blockchain structure', () => {
 describe('Blockchain transactions', () => {
   it('should add a transaction to pendingTransactions', () => {
     const blockchain = new Blockchain();
-
     const transaction = {
       sender: 'Coffee Farm',
       recipient: 'Roastery',
@@ -62,7 +59,6 @@ describe('Blockchain transactions', () => {
 describe('Latest block', () => {
   it('should return the genesis block', () => {
     const blockchain = new Blockchain();
-
     const latestBlock = blockchain.getLatestBlock();
 
     expect(latestBlock.index).toBe(0);
@@ -73,7 +69,6 @@ describe('Latest block', () => {
 describe('Mining pending transactions', () => {
   it('should mine pending transactions into a new block', () => {
     const blockchain = new Blockchain();
-
     const transaction = {
       sender: 'Coffee Farm',
       recipient: 'Roastery',
@@ -97,10 +92,17 @@ describe('Mining pending transactions', () => {
 describe('Mining without pending transactions', () => {
   it('should not create a new block when there are no pending transactions', () => {
     const blockchain = new Blockchain();
-
     const result = blockchain.minePendingTransactions();
 
     expect(result).toBeNull();
     expect(blockchain.chain).toHaveLength(1);
+  });
+});
+
+describe('Blockchain difficulty', () => {
+  it('should use difficulty 1 in test environment', () => {
+    const blockchain = new Blockchain();
+
+    expect(blockchain.difficulty).toBe(1);
   });
 });
