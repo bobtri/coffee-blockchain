@@ -48,6 +48,40 @@ describe('POST /transactions', () => {
     expect(response.status).toBe(400);
     expect(response.body.error).toBeDefined();
   });
+
+  it('should reject a transaction with invalid field types', async () => {
+    const invalidTransaction = {
+      sender: 123,
+      recipient: 'Roastery',
+      batchId: 'BATCH-003',
+      weightKg: 250,
+    };
+
+    const response = await request(app)
+      .post('/transactions')
+      .send(invalidTransaction);
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe(
+      'sender, recipient and batchId must be strings',
+    );
+  });
+
+  it('should reject a transaction with invalid weight', async () => {
+    const invalidTransaction = {
+      sender: 'Coffee Farm',
+      recipient: 'Roastery',
+      batchId: 'BATCH-004',
+      weightKg: -10,
+    };
+
+    const response = await request(app)
+      .post('/transactions')
+      .send(invalidTransaction);
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('weightKg must be a positive number');
+  });
 });
 
 describe('POST /mine', () => {

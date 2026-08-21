@@ -7,6 +7,22 @@ function validateTransaction(req, res, next) {
     });
   }
 
+  if (
+    typeof sender !== 'string' ||
+    typeof recipient !== 'string' ||
+    typeof batchId !== 'string'
+  ) {
+    return res.status(400).json({
+      error: 'sender, recipient and batchId must be strings',
+    });
+  }
+
+  if (typeof weightKg !== 'number' || weightKg <= 0) {
+    return res.status(400).json({
+      error: 'weightKg must be a positive number',
+    });
+  }
+
   next();
 }
 
